@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metal Surface Defects Inspection</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;600&display=swap');
+        
+        body {
+            font-family: 'Raleway', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: #fff;
+            margin: 0;
+            flex-direction: column;
+        }
+        .container {
+            display: flex;
+            flex-direction: row;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 15px 35px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(12px);
+            max-width: 650px;
+            width: 100%;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        .container:hover {
+            transform: scale(1.05);
+        }
+        .upload-section {
+            flex: 1;
+            padding-right: 20px;
+        }
+        .image-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 3px dashed #fff;
+            width: 320px;
+            height: 320px;
+            text-align: center;
+            position: relative;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        img {
+            max-width: 100%;
+            max-height: 100%;
+            position: absolute;
+            border-radius: 12px;
+        }
+        button {
+            background: #ff7eb3;
+            border: none;
+            padding: 12px 18px;
+            color: #fff;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            width: 100%;
+            margin-top: 10px;
+            box-shadow: 0px 5px 15px rgba(255, 126, 179, 0.5);
+        }
+        button:hover {
+            background: #ff4e87;
+        }
+        input[type="file"] {
+            margin-bottom: 12px;
+            padding: 8px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border: 1px solid #fff;
+            transition: 0.3s;
+        }
+        input[type="file"]:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        #output {
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+            text-align: center;
+            text-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        /* New defect info section */
+        #defectInfo {
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 12px;
+            display: none;
+            width: 600px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="upload-section">
+            <h2>Upload Metal Surface Image</h2>
+            <input type="file" id="imageUpload" accept="image/*">
+            <button onclick="uploadImage()">Predict Defect</button>
+            <div id="output"></div>
+        </div>
+        <div class="image-container" id="imageContainer">
+            <p>Uploaded Image</p>
+        </div>
+    </div>
+
+    <!-- New Section to Show the Reason -->
+    <div id="defectInfo"></div>
+
+    <script>
+        function uploadImage() {
+            let input = document.getElementById('imageUpload');
+            let file = input.files[0];
+            if (!file) {
+                alert("Please select an image first.");
+                return;
+            }
+
+            let formData = new FormData();
+            formData.append("image", file);
+
+            let reader = new FileReader();
+            reader.onload = function(event) {
+                let imgElement = document.createElement("img");
+                imgElement.src = event.target.result;
+                let container = document.getElementById("imageContainer");
+                container.innerHTML = "";
+                container.appendChild(imgElement);
+            };
+            reader.readAsDataURL(file);
+
+            fetch("/pre", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display predicted defect
+                document.getElementById("output").innerText = "Predicted Defect: " + data.defect;
+                
+                // Display reason if available
+                let defectInfo = document.getElementById("defectInfo");
+                if (data.reason) {
+                    defectInfo.innerText = "Why this defect occurs: " + data.reason;
+                    defectInfo.style.display = "block"; // Make it visible
+                } else {
+                    defectInfo.style.display = "none"; // Hide if no reason
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        }
+    </script>
+</body>
+</html>

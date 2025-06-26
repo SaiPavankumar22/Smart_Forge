@@ -1,0 +1,290 @@
+/* General Styles */
+:root {
+    --primary-color: #0d6efd;
+    --primary-dark: #0b5ed7;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    padding-top: 4rem;
+}
+
+
+/* Hero Section */
+.hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: flex-start; /* Align content to the left */
+    align-items: center;
+    overflow: hidden;
+    padding-left: 2rem; /* Optional: adds some padding from the left */
+}
+
+.hero-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1; /* Place the video behind the content */
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1; /* Place text above the video */
+    color: white;
+    max-width: 60%; /* Optional: Restrict text width */
+}
+
+.main-heading {
+    font-size: 6rem; /* Make main heading large */
+    font-weight: bold;
+    margin-bottom: 1rem;
+    line-height: 1.2; /* Adjust line height for better readability */
+}
+
+.subheading {
+    font-size: 1.5rem; /* Smaller font size for the subheading */
+    margin-bottom: 2rem;
+    line-height: 1.6; /* Adjust line height for better readability */
+}
+
+.hero .btn-primary {
+    padding: 0.75rem 2rem;
+    font-size: 1.125rem;
+}
+
+.hero .btn-secondary{
+    background-color: transparent;
+}
+
+
+/* Navbar */
+.navbar {
+    z-index: 1000;
+    background-color: #ffffff;
+    padding: 1rem 0;
+}
+
+.navbar .navbar-brand {
+    font-weight: bold;
+}
+
+.navbar .nav-item .nav-link {
+    font-size: 1rem;
+    padding: 0.5rem 1.25rem;
+}
+
+.navbar .btn-primary {
+    padding: 0.5rem 1.5rem;
+    font-size: 1rem;
+}
+
+/* Feature Section */
+#features {
+    padding: 5rem 0;
+    background-color: #f8f9fa;
+}
+
+#features h2 {
+    font-size: 2.25rem;
+    font-weight: bold;
+}
+
+#features .row .col-md-3 {
+    margin-bottom: 3rem;
+}
+
+#features .bi {
+    font-size: 3rem;
+    color: var(--primary-color);
+}
+
+/* Testimonials Section */
+#testimonials {
+    background-color: #f1f3f5;
+    padding: 5rem 0;
+}
+
+#testimonials h2 {
+    font-size: 2.25rem;
+    font-weight: bold;
+}
+
+.testimonial-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    height: 100%;
+    transition: transform 0.3s ease;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-5px);
+}
+
+.testimonial-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Contact Section */
+#contact {
+    padding: 5rem 0;
+}
+
+#contact h2 {
+    font-size: 2.25rem;
+    font-weight: bold;
+}
+
+.contact-card {
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.contact-form .form-control {
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+}
+
+.contact-form .btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    background-color: var(--primary-color);
+    border: none;
+    border-radius: 0.5rem;
+}
+
+/* Form Styles */
+.form-control:focus {
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+}
+
+input[type="email"]:invalid {
+    border-color: #e3342f;
+}
+
+/* Buttons */
+.btn {
+    padding: 0.75rem 1.25rem;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: var(--primary-dark);
+}
+
+/* Testimonial Image and Card Styles */
+.testimonial-card .testimonial-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.testimonial-card .card-body {
+    padding: 2rem;
+}
+
+.testimonial-card .blockquote {
+    font-style: italic;
+    margin-bottom: 1rem;
+}
+
+.testimonial-card .card-body small {
+    color: #6c757d;
+}
+
+/* Navbar Toggler for Smaller Screens */
+.navbar-toggler {
+    border-color: var(--primary-color);
+}
+
+.navbar-toggler-icon {
+    background-color: var(--primary-color);
+}
+
+
+/* Footer Section */
+.footer {
+    background-color: #000000;
+    color: #f8f9fa;
+}
+
+.footer h5 {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.footer p {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.footer a {
+    text-decoration: none;
+    color: #f8f9fa;
+    transition: color 0.3s;
+}
+
+.footer a:hover {
+    color: var(--primary-color);
+}
+
+.footer .form-control {
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    font-size: 1rem;
+}
+
+.footer .btn-light {
+    background-color: var(--primary-color);
+    color: #ffffff;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    font-size: 1rem;
+}
+
+.footer .btn-light:hover {
+    background-color: var(--primary-dark);
+}
+
+/* Footer Columns */
+.footer .row > div {
+    margin-bottom: 2rem;
+}
+
+@media (max-width: 767px) {
+    .footer .row {
+        text-align: center;
+    }
+
+    .footer .form-control {
+        width: 100%;
+    }
+
+    .footer .btn-light {
+        width: 100%;
+    }
+}

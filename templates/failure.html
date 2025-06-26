@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Machine Failure Prediction</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+  <main class="prediction-page">
+    <div class="back-link">
+      <a href="/home">← Back to Dashboard</a>
+    </div>
+
+    <h1>Machine Failure Prediction</h1>
+    <p class="subtitle">Enter machine parameters to predict potential failures</p>
+
+    <div class="prediction-container">
+      <div class="parameters-section">
+        <h2>Machine Parameters</h2>
+        <div class="input-grid">
+          <div class="input-group">
+            <label for="spindle-speed">Spindle Speed (RPM)</label>
+            <input type="number" id="spindle-speed" placeholder="e.g., 1500" min="0">
+          </div>
+          <div class="input-group">
+            <label for="feed-rate">Feed Rate (mm/min)</label>
+            <input type="number" id="feed-rate" placeholder="e.g., 200" min="0">
+          </div>
+          <div class="input-group">
+            <label for="cutting-depth">Cutting Depth (mm)</label>
+            <input type="number" id="cutting-depth" placeholder="e.g., 2.5" min="0" step="0.1">
+          </div>
+          <div class="input-group">
+            <label for="vibration-levels">Vibration Levels (mm/s²)</label>
+            <input type="number" id="vibration-levels" placeholder="e.g., 3.2" min="0" step="0.1">
+          </div>
+          <div class="input-group">
+            <label for="motor-temperature">Motor Temperature (°C)</label>
+            <input type="number" id="motor-temperature" placeholder="e.g., 75" min="0">
+          </div>
+          <div class="input-group">
+            <label for="lubrication-pressure">Lubrication Pressure (bar)</label>
+            <input type="number" id="lubrication-pressure" placeholder="e.g., 4.5" min="0" step="0.1">
+          </div>
+        </div>
+      </div>
+
+      <div class="parameters-section">
+        <h2>Environmental Conditions</h2>
+        <div class="input-grid">
+          <div class="input-group">
+            <label for="ambient-temperature">Ambient Temperature (°C)</label>
+            <input type="number" id="ambient-temperature" placeholder="e.g., 22" min="0">
+          </div>
+        </div>
+      </div>
+
+      <div class="parameters-section">
+        <h2>Operational Data</h2>
+        <div class="input-grid">
+          <div class="input-group">
+            <label for="machine-usage-hours">Machine Usage Hours</label>
+            <input type="number" id="machine-usage-hours" placeholder="e.g., 1200" min="0">
+          </div>
+        </div>
+      </div>
+
+      <div class="button-container">
+        <button id="predict-button" class="primary-button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+            <polyline points="16 7 22 7 22 13"></polyline>
+          </svg>
+          Predict Failure
+        </button>
+        <button id="reset-button" class="secondary-button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 2v6h6"></path>
+            <path d="M21 12A9 9 0 0 0 6 5.3L3 8"></path>
+            <path d="M21 22v-6h-6"></path>
+            <path d="M3 12a9 9 0 0 0 15 6.7l3-2.7"></path>
+          </svg>
+          Reset Values
+        </button>
+      </div>
+
+      <div id="prediction-results" class="prediction-results hidden">
+        <h2>Prediction Results</h2>
+        <div class="results-container">
+          <div class="result-item">
+            <h3>Failure Type:</h3>
+            <p id="failure-type">-</p>
+          </div>
+          
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Theme toggle functionality
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check for saved theme preference or use preferred color scheme
+      const savedTheme = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+
+      // Theme toggle button
+      const themeToggle = document.getElementById('theme-toggle');
+      if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+          const currentTheme = document.documentElement.getAttribute('data-theme');
+          const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+          document.documentElement.setAttribute('data-theme', newTheme);
+          localStorage.setItem('theme', newTheme);
+        });
+      }
+
+      const predictButton = document.getElementById('predict-button');
+      const resetButton = document.getElementById('reset-button');
+      const predictionResults = document.getElementById('prediction-results');
+
+      if (predictButton && resetButton) {
+        // Predict button click handler
+        predictButton.addEventListener('click', async () => {
+          // Get all input values
+          const spindleSpeed = parseFloat(document.getElementById('spindle-speed').value) || 0;
+          const feedRate = parseFloat(document.getElementById('feed-rate').value) || 0;
+          const cuttingDepth = parseFloat(document.getElementById('cutting-depth').value) || 0;
+          const vibrationLevels = parseFloat(document.getElementById('vibration-levels').value) || 0;
+          const motorTemperature = parseFloat(document.getElementById('motor-temperature').value) || 0;
+          const lubricationPressure = parseFloat(document.getElementById('lubrication-pressure').value) || 0;
+          const ambientTemperature = parseFloat(document.getElementById('ambient-temperature').value) || 0;
+          const machineUsageHours = parseFloat(document.getElementById('machine-usage-hours').value) || 0;
+
+          // Check if all required fields are filled
+          const requiredInputs = [
+            'spindle-speed', 'feed-rate', 'cutting-depth', 'vibration-levels',
+            'motor-temperature', 'lubrication-pressure', 'ambient-temperature', 'machine-usage-hours'
+          ];
+
+          const allFilled = requiredInputs.every(id => document.getElementById(id).value.trim() !== '');
+
+          if (!allFilled) {
+            alert('Please fill in all fields to get an accurate prediction.');
+            return;
+          }
+
+          // Prepare data for backend
+          const inputData = {
+            spindle_speed: spindleSpeed,
+            feed_rate: feedRate,
+            cutting_depth: cuttingDepth,
+            vibration_levels: vibrationLevels,
+            motor_temperature: motorTemperature,
+            lubrication_pressure: lubricationPressure,
+            ambient_temperature: ambientTemperature,
+            machine_usage_hours: machineUsageHours
+          };
+
+          try {
+            // Send data to backend
+            const response = await fetch('/failures', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(inputData)
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+              // Display the prediction results
+              document.getElementById("failure-type").textContent = result.failure_type;
+              
+
+              predictionResults.classList.remove("hidden");
+            } else {
+              alert('Prediction failed: ' + result.error);
+            }
+          } catch (error) {
+            alert('Error connecting to the server');
+          }
+        });
+
+        // Reset button click handler
+        resetButton.addEventListener('click', () => {
+          // Clear all input fields
+          const inputFields = document.querySelectorAll('input[type="number"]');
+          inputFields.forEach(input => {
+            input.value = '';
+          });
+
+          // Hide the results section
+          predictionResults.classList.add('hidden');
+        });
+      }
+
+    });
+  </script>
+</body>
+
+</html>

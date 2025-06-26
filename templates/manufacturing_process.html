@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <title>Industrial Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar Toggle Button -->
+    <button id="sidebarToggle" class="sidebar-toggle">
+      <i class="fas fa-bars"></i>
+    </button>
+    
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <img src="https://via.placeholder.com/50" alt="Logo" class="logo">
+        <h3>IndustrialTech</h3>
+      </div>
+      <nav class="sidebar-nav">
+        <ul>
+          <li class="active" data-page="home"><a href="#"><i class="fas fa-home"></i> Home</a></li>
+          <li data-page="predictive-models"><a href="#"><i class="fas fa-chart-line"></i> Predictive Models</a></li>
+          <li data-page="report-analysis"><a href="/report-analysis.html"><i class="fas fa-file-alt"></i> Report Analysis</a></li>
+          <li data-page="educational-overview"><a href="#"><i class="fas fa-graduation-cap"></i> Educational Overview</a></li>
+          <li class="premium-option"><a href="/premium"><i class="fas fa-crown"></i> Premium</a></li>
+        </ul>
+        <div class="account-section">
+          <a href="/accounts"><i class="fas fa-user-circle"></i> Account</a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Top Navigation Bar -->
+      <header class="top-nav">
+        <div class="company-info">
+          <h2>IndustrialTech Solutions</h2>
+        </div>
+        <div class="nav-actions">
+          <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark/light mode">
+            <i class="fas fa-moon"></i>
+            <i class="fas fa-sun"></i>
+          </button>
+          <button class="premium-btn" onclick="location.href='/premium';"><i class="fas fa-crown"></i> Premium</button>
+          <button class="account-btn"  onclick="location.href='/accounts';"><i class="fas fa-user-circle"></i> Account</button>
+        </div>
+      </header>
+
+      <!-- Educational Overview Page -->
+      <div id="educational-overview" class="page-content">
+        <section class="welcome-section">
+          <h1>Educational Overview</h1>
+          <p class="subtitle">Explore educational resources to enhance your industrial knowledge</p>
+        </section>
+
+        <div class="model-cards">
+          <div class="model-card edu-card">
+            <div class="model-icon">
+              <i class="fas fa-cog"></i>
+            </div>
+            <h3>Manufacturing Processes</h3>
+            <p>Learn about various manufacturing techniques and processes</p>
+            <button class="model-btn">Explore</button>
+          </div>
+
+          <div class="model-card edu-card">
+            <div class="model-icon">
+              <i class="fas fa-tools"></i>
+            </div>
+            <h3>Machines & Tools</h3>
+            <p>Understand industrial machinery and tooling systems</p>
+            <button class="model-btn">Explore</button>
+          </div>
+
+          <div class="model-card edu-card">
+            <div class="model-icon">
+              <i class="fas fa-book"></i>
+            </div>
+            <h3>Case Studies</h3>
+            <p>Real-world applications and problem-solving examples</p>
+            <button class="model-btn">Explore</button>
+          </div>
+
+          <div class="model-card edu-card">
+            <div class="model-icon">
+              <i class="fas fa-cube"></i>
+            </div>
+            <h3>3D Visualization</h3>
+            <p>Interactive 3D models of industrial components and systems</p>
+            <button class="model-btn">Explore</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Report Analysis Page (placeholder) -->
+      
+    </main>
+  </div>
+
+  <script src="{{ url_for('static', filename='dashboard.js') }}" type="module"></script>
+</body>
+</html>

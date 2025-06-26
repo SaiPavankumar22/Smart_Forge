@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <title>Account Settings - Industrial Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .account-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    .account-header {
+      margin-bottom: 30px;
+    }
+    
+    .account-header h1 {
+      font-size: 32px;
+      margin-bottom: 10px;
+      color: var(--primary-color);
+    }
+    
+    .account-header p {
+      font-size: 16px;
+      color: var(--text-light);
+    }
+    
+    .account-card {
+      background-color: var(--card-background);
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      padding: 30px;
+      margin-bottom: 30px;
+      transition: background-color 0.3s ease;
+    }
+    
+    .account-section {
+      margin-bottom: 20px;
+    }
+    
+    .account-section h2 {
+      font-size: 20px;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      color: var(--primary-color);
+    }
+    
+    .profile-info {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 30px;
+      align-items: center;
+    }
+    
+    .profile-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      overflow: hidden;
+      background-color: #e0e0e0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .profile-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .profile-avatar i {
+      font-size: 60px;
+      color: #9e9e9e;
+    }
+    
+    .profile-details {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 15px;
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+      color: var(--text-color);
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+      background-color: var(--card-background);
+      color: var(--text-color);
+    }
+    
+    .form-control:disabled {
+      background-color: rgba(0, 0, 0, 0.05);
+      cursor: not-allowed;
+    }
+    
+    .account-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      font-size: 16 px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .btn-secondary {
+      background-color: #e0e0e0;
+      color: var(--text-color);
+    }
+    
+    .btn:hover {
+      opacity: 0.9;
+    }
+    
+    .subscription-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .plan-badge {
+      display: inline-block;
+      padding: 5px 10px;
+      background-color: rgba(26, 115, 232, 0.1);
+      color: var(--primary-color);
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    
+    .activity-list {
+      list-style: none;
+    }
+    
+    .activity-item {
+      padding: 15px 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .activity-item:last-child {
+      border-bottom: none;
+    }
+    
+    .activity-title {
+      font-weight: 500;
+      margin-bottom: 5px;
+    }
+    
+    .activity-time {
+      font-size: 14px;
+      color: var(--text-light);
+    }
+    
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      color: var(--primary-color);
+      text-decoration: none;
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+    
+    .back-link i {
+      margin-right: 5px;
+    }
+    
+    .back-link:hover {
+      text-decoration: underline;
+    }
+    
+    .theme-toggle-container {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 20px;
+    }
+    
+    @media (max-width: 768px) {
+      .profile-info {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      
+      .profile-avatar {
+        margin: 0 auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="account-container">
+    <div class="theme-toggle-container">
+      <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark/light mode">
+        <i class="fas fa-moon"></i>
+        <i class="fas fa-sun"></i>
+      </button>
+    </div>
+    
+    <a href="/home" class="back-link">
+      <i class="fas fa-arrow-left"></i> Back to Dashboard
+    </a>
+    
+    <div class="account-header">
+      <h1>Account Settings</h1>
+      <p>Manage your profile and preferences</p>
+    </div>
+    
+    <div class="account-card">
+      <div class="account-section">
+        <h2>Profile Information</h2>
+        <div class="profile-info">
+          <div class="profile-avatar">
+            <i class="fas fa-user"></i>
+          </div>
+          <div class="profile-details">
+            <form id="profileForm">
+              <div class="form-group">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" class="form-control" value="John Doe" disabled>
+              </div>
+              <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" class="form-control" value="john.doe@example.com" disabled>
+              </div>
+              <div class="form-group">
+                <label for="company">Company</label>
+                <input type="text" id="company" class="form-control" value="IndustrialTech Solutions" disabled>
+              </div>
+              <div class="form-group">
+                <label for="position">Position</label>
+                <input type="text" id="position" class="form-control" value="Senior Engineer" disabled>
+              </div>
+              <div class="account-actions">
+                <button type="button" id="editProfileBtn" class="btn btn-primary">Edit Profile</button>
+                <button type="button" id="saveProfileBtn" class="btn btn-primary" style="display: none;">Save Changes</button>
+                <button type="button" id="cancelEditBtn" class="btn btn-secondary" style="display: none;">Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="account-card">
+      <div class="account-section">
+        <h2>Subscription</h2>
+        <div class="subscription-info">
+          <div>
+            <p>Current Plan: <span class="plan-badge">Free</span></p>
+            <p style="margin-top: 10px; color: var(--text-light);">5 predictions per day remaining</p>
+          </div>
+          <a href="/premium" class="btn btn-primary">Upgrade Plan</a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="account-card">
+      <div class="account-section">
+        <h2>Recent Activity</h2>
+        <ul class="activity-list">
+          <li class="activity-item">
+            <div class="activity-title">Logged in from new device</div>
+            <div class="activity-time">Today, 10:30 AM</div>
+          </li>
+          <li class="activity-item">
+            <div class="activity-title">Ran Machine Failure Prediction model</div>
+            <div class="activity-time">Yesterday, 3:45 PM</div>
+          </li>
+          <li class="activity-item">
+            <div class="activity-title">Updated profile information</div>
+            <div class="activity-time">Aug 15, 2:20 PM</div>
+          </li>
+          <li class="activity-item">
+            <div class="activity-title">Bookmarked "Advanced Predictive Maintenance" course</div>
+            <div class="activity-time">Aug 10, 11:15 AM</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const profileForm = document.getElementById('profileForm');
+      const editProfileBtn = document.getElementById('editProfileBtn');
+      const saveProfileBtn = document.getElementById('saveProfileBtn');
+      const cancelEditBtn = document.getElementById('cancelEditBtn');
+      const formInputs = profileForm.querySelectorAll('.form-control');
+      const themeToggle = document.getElementById('themeToggle');
+      
+      // Store original values
+      const originalValues = {};
+      formInputs.forEach(input => {
+        originalValues[input.id] = input.value;
+      });
+      
+      // Edit profile button
+      editProfileBtn.addEventListener('click', function() {
+        // Enable form fields
+        formInputs.forEach(input => {
+          input.disabled = false;
+        });
+        
+        // Show save and cancel buttons, hide edit button
+        editProfileBtn.style.display = 'none';
+        saveProfileBtn.style.display = 'inline-block';
+        cancelEditBtn.style.display = 'inline-block';
+      });
+      
+      // Save changes button
+      saveProfileBtn.addEventListener('click', function() {
+        // Disable form fields
+        formInputs.forEach(input => {
+          input.disabled = true;
+          // Update original values
+          originalValues[input.id] = input.value;
+        });
+        
+        // Show edit button, hide save and cancel buttons
+        editProfileBtn.style.display = 'inline-block';
+        saveProfileBtn.style.display = 'none';
+        cancelEditBtn.style.display = 'none';
+        
+        // Show success message
+        alert('Profile updated successfully!');
+      });
+      
+      // Cancel edit button
+      cancelEditBtn.addEventListener('click', function() {
+        // Reset form to original values
+        formInputs.forEach(input => {
+          input.value = originalValues[input.id];
+          input.disabled = true;
+        });
+        
+        // Show edit button, hide save and cancel buttons
+        editProfileBtn.style.display = 'inline-block';
+        saveProfileBtn.style.display = 'none';
+        cancelEditBtn.style.display = 'none';
+      });
+      
+      // Theme toggle functionality
+      themeToggle.addEventListener('click', function() {
+        // If the current theme is light, change to dark, and vice versa
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        
+        // Set the theme attribute on the html element
+        document.documentElement.setAttribute('data-theme', newTheme);
+        
+        // Save the theme preference to localStorage
+        localStorage.setItem('theme', newTheme);
+      });
+      
+      // Check for saved theme preference or use default light theme
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    });
+  </script>
+</body>
+</html>

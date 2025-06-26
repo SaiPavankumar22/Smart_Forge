@@ -1,0 +1,12 @@
+Flask
+Flask-Cors
+pymongo
+bcrypt
+pandas
+joblib
+requests
+numpy
+opencv-python
+Werkzeug
+tensorflow
+keras
